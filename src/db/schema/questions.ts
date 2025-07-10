@@ -7,7 +7,7 @@ export const questions = pgTable('questions', {
     .references(() => rooms.id)
     .notNull(),
   question: text().notNull(),
-  answers: text(),
+  answer: text(),
   createdAt: timestamp().defaultNow().notNull(),
   updatedAt: timestamp()
     .defaultNow()

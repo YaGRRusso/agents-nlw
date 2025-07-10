@@ -9,6 +9,8 @@ import {
 import { env } from './env.ts';
 import { createRoom } from './http/routes/create-room.ts';
 import { getRooms } from './http/routes/get-rooms.ts';
+import { getRoomQuestions } from './http/routes/get-room-questions.ts';
+import { createRoomQuestion } from './http/routes/create-room-question.ts';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -29,6 +31,8 @@ app.get('/health', async (_request, reply) => {
 
 app.register(getRooms);
 app.register(createRoom);
+app.register(getRoomQuestions);
+app.register(createRoomQuestion);
 
 app.listen({ port: env.PORT }, (err, address) => {
   console.log(`HTTP Server Running\n${address}`);

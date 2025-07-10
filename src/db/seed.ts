@@ -4,16 +4,10 @@ import { db, sql } from './connection.ts';
 import { schema } from './schema/index.ts';
 
 await reset(db, schema);
-await seed(db, schema).refine((faker) => {
+await seed(db, schema).refine(() => {
   return {
     rooms: {
-      count: 20,
-      columns: {
-        name: faker.companyName(),
-        description: faker.loremIpsum(),
-        createdAt: faker.date({ maxDate: new Date() }),
-        updatedAt: faker.date({ maxDate: new Date() }),
-      },
+      count: 5,
       with: {
         questions: 5,
       },

@@ -14,8 +14,8 @@ export const createRoom: FastifyPluginCallbackZod = (app) => {
         }),
       },
     },
-    async (req) => {
-      const { name, description } = req.body;
+    async (request, reply) => {
+      const { name, description } = request.body;
 
       const res = await db
         .insert(schema.rooms)
@@ -29,7 +29,7 @@ export const createRoom: FastifyPluginCallbackZod = (app) => {
           description: schema.rooms.description,
         });
 
-      return res;
+      return reply.status(20).send(res);
     }
   );
 };
