@@ -14,6 +14,9 @@ await seed(db, schema).refine((faker) => {
         createdAt: faker.date({ maxDate: new Date() }),
         updatedAt: faker.date({ maxDate: new Date() }),
       },
+      with: {
+        questions: 5,
+      },
     },
   };
 });
