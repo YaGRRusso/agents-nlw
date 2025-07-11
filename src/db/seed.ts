@@ -3,13 +3,15 @@ import { reset, seed } from 'drizzle-seed';
 import { db, sql } from './connection.ts';
 import { schema } from './schema/index.ts';
 
-await reset(db, schema);
-await seed(db, schema).refine(() => {
+const { audioChunks: _audioChunks, ...rest } = schema;
+
+await reset(db, rest);
+await seed(db, rest).refine(() => {
   return {
     rooms: {
-      count: 5,
+      count: 3,
       with: {
-        questions: 5,
+        questions: 3,
       },
     },
   };

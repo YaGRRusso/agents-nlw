@@ -29,7 +29,7 @@ export const createRoom: FastifyPluginCallbackZod = (app) => {
           description: schema.rooms.description,
         });
 
-      return reply.status(20).send(res);
+      return reply.status(201).send(res);
     }
   );
 };

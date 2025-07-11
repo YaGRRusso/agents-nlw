@@ -4,7 +4,7 @@ import { db } from '../../db/connection.ts';
 import { schema } from '../../db/schema/index.ts';
 
 export const getRooms: FastifyPluginCallbackZod = (app) => {
-  app.get('/rooms', async () => {
+  app.get('/rooms', async (_, reply) => {
     const res = await db
       .select({
         id: schema.rooms.id,
@@ -18,6 +18,6 @@ export const getRooms: FastifyPluginCallbackZod = (app) => {
       .groupBy(schema.rooms.id, schema.rooms.name)
       .orderBy(schema.rooms.createdAt);
 
-    return res;
+    return reply.status(200).send(res);
   });
 };

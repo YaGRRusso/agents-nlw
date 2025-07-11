@@ -1,5 +1,8 @@
 import type { FastifyPluginCallbackZod } from 'fastify-type-provider-zod';
 import { z } from 'zod/v4';
+import { db } from '../../db/connection.ts';
+import { schema } from '../../db/schema/index.ts';
+import { generateEmbeddings, transcribeAudio } from '../../services/gemini.ts';
 
 export const uploadRoomAudio: FastifyPluginCallbackZod = (app) => {
   app.post(
@@ -12,7 +15,7 @@ export const uploadRoomAudio: FastifyPluginCallbackZod = (app) => {
       },
     },
     async (request, reply) => {
-      // const { id } = request.params;
+      const { id } = request.params;
 
       const audio = await request.file();
 
@@ -20,7 +23,28 @@ export const uploadRoomAudio: FastifyPluginCallbackZod = (app) => {
         throw new Error('NO_AUDIO_FILE');
       }
 
-      return reply.status(201).send('ok');
+      const audioBuffer = await audio.toBuffer();
+      const audioAsBase64 = audioBuffer.toString('base64');
+      const transcription = await transcribeAudio(
+        audioAsBase64,
+        audio.mimetype
+      );
+      const embeddings = await generateEmbeddings(transcription);
+
+      const res = await db
+        .insert(schema.audioChunks)
+        .values({
+          roomId: id,
+          transcription,
+          embeddings,
+        })
+        .returning({
+          id: schema.audioChunks.id,
+          transcription: schema.audioChunks.transcription,
+          embeddings: schema.audioChunks.embeddings,
+        });
+
+      return reply.status(201).send(res);
     }
   );
 };

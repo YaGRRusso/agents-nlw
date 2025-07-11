@@ -43,7 +43,7 @@ POST {{BASE}}/rooms/{{roomId}}/questions
 Content-Type: application/json
 
 {
-  "question": "What is the question?"
+  "question": "What is the message?"
 }
 
 ### Upload Room Audio
