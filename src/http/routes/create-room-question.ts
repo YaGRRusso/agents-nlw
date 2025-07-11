@@ -27,19 +27,19 @@ export const createRoomQuestion: FastifyPluginCallbackZod = (app) => {
 
       const chunks = await db
         .select({
-          id: schema.audioChunks.id,
-          transcription: schema.audioChunks.transcription,
-          similarity: sql<number>`1 - (${schema.audioChunks.embeddings} <=> ${embeddingsAsString}::vector)`,
+          id: schema.audios.id,
+          transcription: schema.audios.transcription,
+          similarity: sql<number>`1 - (${schema.audios.embeddings} <=> ${embeddingsAsString}::vector)`,
         })
-        .from(schema.audioChunks)
+        .from(schema.audios)
         .where(
           and(
-            eq(schema.audioChunks.roomId, id),
-            sql`1 - (${schema.audioChunks.embeddings} <=> ${embeddingsAsString}::vector) < 0.7`
+            eq(schema.audios.roomId, id),
+            sql`1 - (${schema.audios.embeddings} <=> ${embeddingsAsString}::vector) < 0.7`
           )
         )
         .orderBy(
-          sql`(${schema.audioChunks.embeddings} <=> ${embeddingsAsString}::vector)`
+          sql`(${schema.audios.embeddings} <=> ${embeddingsAsString}::vector)`
         )
         .limit(3);
 

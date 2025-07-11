@@ -32,16 +32,16 @@ export const uploadRoomAudio: FastifyPluginCallbackZod = (app) => {
       const embeddings = await generateEmbeddings(transcription);
 
       const res = await db
-        .insert(schema.audioChunks)
+        .insert(schema.audios)
         .values({
           roomId: id,
           transcription,
           embeddings,
         })
         .returning({
-          id: schema.audioChunks.id,
-          transcription: schema.audioChunks.transcription,
-          embeddings: schema.audioChunks.embeddings,
+          id: schema.audios.id,
+          transcription: schema.audios.transcription,
+          embeddings: schema.audios.embeddings,
         });
 
       return reply.status(201).send(res);

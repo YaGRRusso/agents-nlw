@@ -3,7 +3,7 @@ import { reset, seed } from 'drizzle-seed';
 import { db, sql } from './connection.ts';
 import { schema } from './schema/index.ts';
 
-const { audioChunks: _audioChunks, ...rest } = schema;
+const { audios: _audios, ...rest } = schema;
 
 await reset(db, rest);
 await seed(db, rest).refine(() => {
